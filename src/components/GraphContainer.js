@@ -1,6 +1,7 @@
 import React from "react";
 import pigData from "../wild-pig-data.json";
 import queryString from "query-string";
+import PlayPauseButton from "./PlayPauseButton";
 
 class GraphContainer extends React.PureComponent {
   constructor(props) {
@@ -8,6 +9,7 @@ class GraphContainer extends React.PureComponent {
 
     this.getQueryString = this.getQueryString.bind(this);
     this.parseAndBuildPigData = this.parseAndBuildPigData.bind(this);
+    this.togglePlayPause = this.togglePlayPause.bind(this);
   }
 
   componentDidMount() {
@@ -47,29 +49,44 @@ class GraphContainer extends React.PureComponent {
     return newPigData;
   }
 
+  togglePlayPause() {
+    const { paused } = this.state;
+    const newState = { ...this.state, paused: !paused };
+    this.setState(newState);
+  }
+
   render() {
+    if (!this.state) {
+      return null;
+    }
+    const { paused } = this.state;
+
     return (
-      <div className="App">
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <table>
-          <tbody>
-            <tr>
-              <th>Year</th>
-              <th>Island</th>
-              <th>Population</th>
-            </tr>
-            {pigData["PIG POPULATIONS"].map((datum, index) => (
-              <tr key={index}>
-                <td>{datum.year}</td>
-                <td>{datum.island}</td>
-                <td>{datum.pigPopulation}</td>
+      <React.Fragment>
+        <PlayPauseButton paused={paused} onClick={this.togglePlayPause} />
+        <div className="App">
+          <p className="App-intro">
+            To get started, edit <code>src/App.js</code> and save to reload.
+          </p>
+
+          <table>
+            <tbody>
+              <tr>
+                <th>Year</th>
+                <th>Island</th>
+                <th>Population</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+              {pigData["PIG POPULATIONS"].map((datum, index) => (
+                <tr key={index}>
+                  <td>{datum.year}</td>
+                  <td>{datum.island}</td>
+                  <td>{datum.pigPopulation}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </React.Fragment>
     );
   }
 }
