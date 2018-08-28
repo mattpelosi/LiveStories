@@ -5,20 +5,46 @@ import queryString from "query-string";
 class GraphContainer extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
 
-    this.getAndSetQueryString = this.getAndSetQueryString.bind(this);
+    this.getQueryString = this.getQueryString.bind(this);
+    this.parseAndBuildPigData = this.parseAndBuildPigData.bind(this);
   }
 
   componentDidMount() {
-    this.getAndSetQueryString();
+    const { paused, year } = this.getQueryString();
+    const pigPopulations = this.parseAndBuildPigData(pigData);
+    this.setState({ paused, year, pigPopulations });
   }
 
-  getAndSetQueryString() {
+  getQueryString() {
     const { paused, year } = queryString.parse(this.props.location.search);
-    if (paused || year) {
-      this.setState({ isPaused: paused, year: year });
+    if (paused && year) {
+      return { paused: paused, year: year };
+    } else if (paused) {
+      return { paused: paused, year: null };
+    } else if (year) {
+      return { paused: true, year: year };
+    } else {
+      return { paused: true, year: null };
     }
+  }
+
+  parseAndBuildPigData(pigData) {
+    const pigPopulations = pigData["PIG POPULATIONS"];
+    const newPigData = {};
+
+    pigPopulations.forEach(item => {
+      const { year, island, pigPopulation } = item;
+      if (!newPigData[year]) {
+        newPigData[year] = [{ island, pigPopulation }];
+      } else {
+        newPigData[year].push({
+          island,
+          pigPopulation
+        });
+      }
+    });
+    return newPigData;
   }
 
   render() {
