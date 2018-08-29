@@ -10,12 +10,22 @@ class StopWatch extends React.Component {
     this.clearTimer = this.clearTimer.bind(this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.paused !== this.props.paused) {
+      return true;
+    }
+    if (nextState.count > 0 && nextState.count <= 2000) {
+      return false;
+    }
+    return true;
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.paused !== this.props.paused) {
-      if (this.props.paused === false) {
-        this.startTimer();
-      } else {
+      if (this.props.paused) {
         this.pauseTimer();
+      } else {
+        this.startTimer();
       }
     }
     if (prevState.count > 2000) {
@@ -41,6 +51,10 @@ class StopWatch extends React.Component {
 
   clearTimer() {
     this.setState({ count: 0, willIncrementYear: true });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
   }
 
   render() {
