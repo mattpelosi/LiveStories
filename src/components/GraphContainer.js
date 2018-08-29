@@ -2,6 +2,7 @@ import React from "react";
 import pigData from "../wild-pig-data.json";
 import queryString from "query-string";
 import PlayPauseButton from "./PlayPauseButton";
+import DisplayYear from "./DisplayYear";
 
 class GraphContainer extends React.PureComponent {
   constructor(props) {
@@ -59,11 +60,12 @@ class GraphContainer extends React.PureComponent {
     if (!this.state) {
       return null;
     }
-    const { paused } = this.state;
+    const { paused, year } = this.state;
 
     return (
       <React.Fragment>
         <PlayPauseButton paused={paused} onClick={this.togglePlayPause} />
+        <DisplayYear year={year} />
         <div className="App">
           <p className="App-intro">
             To get started, edit <code>src/App.js</code> and save to reload.
