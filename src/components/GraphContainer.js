@@ -3,6 +3,7 @@ import pigData from "../wild-pig-data.json";
 import queryString from "query-string";
 import PlayPauseButton from "./PlayPauseButton";
 import DisplayYear from "./DisplayYear";
+import StopWatch from "./StopWatch";
 
 class GraphContainer extends React.PureComponent {
   constructor(props) {
@@ -11,6 +12,7 @@ class GraphContainer extends React.PureComponent {
     this.getQueryString = this.getQueryString.bind(this);
     this.parseAndBuildPigData = this.parseAndBuildPigData.bind(this);
     this.togglePlayPause = this.togglePlayPause.bind(this);
+    this.incrementYear = this.incrementYear.bind(this);
   }
 
   componentDidMount() {
@@ -56,6 +58,11 @@ class GraphContainer extends React.PureComponent {
     this.setState(newState);
   }
 
+  incrementYear() {
+    const years = Object.keys(this.state.pigPopulations);
+    console.log(years);
+  }
+
   render() {
     if (!this.state) {
       return null;
@@ -66,6 +73,7 @@ class GraphContainer extends React.PureComponent {
       <React.Fragment>
         <PlayPauseButton paused={paused} onClick={this.togglePlayPause} />
         <DisplayYear year={year} />
+        <StopWatch paused={paused} incrementYear={this.incrementYear} />
         <div className="App">
           <p className="App-intro">
             To get started, edit <code>src/App.js</code> and save to reload.
