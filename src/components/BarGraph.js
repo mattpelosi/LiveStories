@@ -10,12 +10,17 @@ class BarGraph extends React.Component {
     this.buildOptions = this.buildOptions.bind(this);
   }
 
-  componentDidMount() {
-    window.google.charts.load("current", { packages: ["corechart"] });
+  async componentDidMount() {
+    await window.google.charts.load("current", { packages: ["corechart"] });
+    if (this.props.pigData) {
+      const data = this.buildDataTable();
+      const options = this.buildOptions();
+      window.google.charts.setOnLoadCallback(this.drawChart(data, options));
+    }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) {
+    if (prevProps.pigData !== this.props.pigData) {
       if (this.props.pigData) {
         const data = this.buildDataTable();
         const options = this.buildOptions();
@@ -27,6 +32,7 @@ class BarGraph extends React.Component {
   buildDataTable() {
     const { pigData } = JSON.parse(JSON.stringify(this.props));
     pigData.unshift(["Element", "Density"]);
+
     var data = new window.google.visualization.arrayToDataTable(pigData);
     return data;
   }
@@ -35,7 +41,12 @@ class BarGraph extends React.Component {
     return {
       title: "How Much Pizza I Ate Last Night",
       width: 400,
-      height: 300
+      height: 300,
+      animation: {
+        duration: 2000,
+        easing: "out",
+        startup: true
+      }
     };
   }
 

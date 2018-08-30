@@ -52,9 +52,12 @@ class GraphContainer extends React.PureComponent {
   }
 
   togglePlayPause() {
-    const { paused } = this.state;
-    const newState = { ...this.state, paused: !paused };
-    this.setState(newState);
+    const { paused, year } = this.state;
+    let newState;
+    if (year) {
+      newState = { ...this.state, paused: !paused, year: year };
+      this.setState(newState);
+    }
   }
 
   incrementYear() {
