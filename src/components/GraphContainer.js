@@ -18,15 +18,16 @@ class GraphContainer extends React.PureComponent {
   componentDidMount() {
     const { paused, year } = this.getQueryString();
     const pigPopulations = this.parseAndBuildPigData(pigData);
-    this.setState({ paused, year, pigPopulations });
+    const newState = { paused, year, pigPopulations };
+    this.setState(newState);
   }
 
   getQueryString() {
-    const { paused, year } = queryString.parse(this.props.location.search);
+    let { paused, year } = queryString.parse(this.props.location.search);
     if (paused && year) {
-      return { paused: paused, year: year };
+      return { paused: JSON.parse(paused), year: year };
     } else if (paused) {
-      return { paused: paused, year: null };
+      return { paused: JSON.parse(paused), year: null };
     } else if (year) {
       return { paused: true, year: year };
     } else {
@@ -59,8 +60,18 @@ class GraphContainer extends React.PureComponent {
   }
 
   incrementYear() {
+    const { year } = this.state;
     const years = Object.keys(this.state.pigPopulations);
-    console.log(years);
+    if (!year) {
+      this.setState({ year: years[0] });
+    } else {
+      const index = years.indexOf(year);
+      if (years[index + 1]) {
+        this.setState({ year: years[index + 1] });
+      } else {
+        this.setState({ year: years[0] });
+      }
+    }
   }
 
   render() {
@@ -71,31 +82,14 @@ class GraphContainer extends React.PureComponent {
 
     return (
       <React.Fragment>
-        <PlayPauseButton paused={paused} onClick={this.togglePlayPause} />
         <DisplayYear year={year} />
-        <StopWatch paused={paused} incrementYear={this.incrementYear} />
-        <div className="App">
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
-          </p>
+        <PlayPauseButton paused={paused} onClick={this.togglePlayPause} />
 
-          <table>
-            <tbody>
-              <tr>
-                <th>Year</th>
-                <th>Island</th>
-                <th>Population</th>
-              </tr>
-              {pigData["PIG POPULATIONS"].map((datum, index) => (
-                <tr key={index}>
-                  <td>{datum.year}</td>
-                  <td>{datum.island}</td>
-                  <td>{datum.pigPopulation}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <StopWatch
+          paused={paused}
+          incrementYear={this.incrementYear}
+          interval={2000}
+        />
       </React.Fragment>
     );
   }
