@@ -4,6 +4,7 @@ import queryString from "query-string";
 import PlayPauseButton from "./PlayPauseButton";
 import DisplayYear from "./DisplayYear";
 import StopWatch from "./StopWatch";
+import BarGraph from "./BarGraph";
 
 class GraphContainer extends React.PureComponent {
   constructor(props) {
@@ -42,12 +43,9 @@ class GraphContainer extends React.PureComponent {
     pigPopulations.forEach(item => {
       const { year, island, pigPopulation } = item;
       if (!newPigData[year]) {
-        newPigData[year] = [{ island, pigPopulation }];
+        newPigData[year] = [[island, pigPopulation]];
       } else {
-        newPigData[year].push({
-          island,
-          pigPopulation
-        });
+        newPigData[year].push([island, pigPopulation]);
       }
     });
     return newPigData;
@@ -78,13 +76,19 @@ class GraphContainer extends React.PureComponent {
     if (!this.state) {
       return null;
     }
-    const { paused, year } = this.state;
+    const { paused, year, pigPopulations } = this.state;
+    let pigData;
+    for (let dataYear in pigPopulations) {
+      if (dataYear === year) {
+        pigData = pigPopulations[year];
+      }
+    }
 
     return (
       <React.Fragment>
         <DisplayYear year={year} />
         <PlayPauseButton paused={paused} onClick={this.togglePlayPause} />
-
+        <BarGraph pigData={pigData} />
         <StopWatch
           paused={paused}
           incrementYear={this.incrementYear}
