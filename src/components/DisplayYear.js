@@ -1,12 +1,35 @@
 import React from "react";
-import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+const styles = theme => ({
+  paper: {
+    padding: theme.spacing.unit * 2,
+    textAlign: "center",
+    color: theme.palette.text.secondary
+  }
+});
 
 function DisplayYear(props) {
+  const { classes, total, current } = props;
+  const active = total.indexOf(current);
+
   return (
-    <Typography variant="headline" component="h3">
-      {props.year}
-    </Typography>
+    <Paper className={classes.paper}>
+      <Tabs
+        value={active}
+        indicatorColor="primary"
+        textColor="primary"
+        centered
+      >
+        {total.map(year => {
+          return <Tab label={year} />;
+        })}
+      </Tabs>
+    </Paper>
   );
 }
 
-export default DisplayYear;
+export default withStyles(styles)(DisplayYear);

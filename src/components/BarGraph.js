@@ -1,5 +1,15 @@
 import React from "react";
 import window from "./globals/window";
+import withStyles from "@material-ui/core/styles/withStyles";
+import Paper from "@material-ui/core/Paper";
+
+const styles = theme => ({
+  paper: {
+    padding: theme.spacing.unit * 2,
+    textAlign: "center",
+    color: theme.palette.text.secondary
+  }
+});
 
 class BarGraph extends React.Component {
   constructor(props) {
@@ -39,14 +49,15 @@ class BarGraph extends React.Component {
 
   buildOptions() {
     return {
-      title: "How Much Pizza I Ate Last Night",
-      width: 400,
-      height: 300,
+      title: "Annual Population of wild pigs for all Hawiian Islands",
+      width: 600,
+      height: 400,
       animation: {
         duration: 2000,
         easing: "out",
         startup: true
-      }
+      },
+      legend: "none"
     };
   }
 
@@ -56,12 +67,13 @@ class BarGraph extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
-      <div>
+      <Paper className={classes.paper}>
         <div ref={this.chartRef} />
-      </div>
+      </Paper>
     );
   }
 }
 
-export default BarGraph;
+export default withStyles(styles)(BarGraph);
