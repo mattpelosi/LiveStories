@@ -42,7 +42,9 @@ class BarGraph extends React.Component {
 
   buildDataTable() {
     const { pigData } = JSON.parse(JSON.stringify(this.props));
-    pigData.unshift(["Element", "Density"]);
+    // debugger;
+    pigData.forEach(item => item.push("color: #3F51B5"));
+    pigData.unshift(["Element", "Density", { role: "style" }]);
 
     var data = new window.google.visualization.arrayToDataTable(pigData);
     return data;
@@ -65,6 +67,7 @@ class BarGraph extends React.Component {
   drawChart(data, options) {
     var chart = new window.google.visualization.BarChart(this.chartRef.current);
     chart.draw(data, options);
+    chart.container.childNodes[0].childNodes[0].style.margin = "0 auto";
   }
 
   render() {
