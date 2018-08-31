@@ -11,8 +11,9 @@ const styles = theme => ({
 });
 
 function PlayPauseButton(props) {
+  const { classes } = props;
   return (
-    <Button variant="fab" onClick={props.onClick}>
+    <Button size="large" className={classes.button} onClick={props.onClick} variant="outlined">
       {props.paused ? <PlayArrowIcon /> : <PauseIcon />}
     </Button>
   );

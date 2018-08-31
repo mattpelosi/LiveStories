@@ -5,6 +5,21 @@ import PlayPauseButton from "./PlayPauseButton";
 import DisplayYear from "./DisplayYear";
 import StopWatch from "./StopWatch";
 import BarGraph from "./BarGraph";
+import withStyles from "@material-ui/core/styles/withStyles";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    background: "#eeeeee"
+  },
+  paper: {
+    padding: theme.spacing.unit * 2,
+    textAlign: "center",
+    color: theme.palette.text.secondary
+  }
+});
 
 class GraphContainer extends React.PureComponent {
   constructor(props) {
@@ -80,6 +95,8 @@ class GraphContainer extends React.PureComponent {
       return null;
     }
     const { paused, year, pigPopulations } = this.state;
+    const { classes } = this.props;
+    const years = Object.keys(pigPopulations)
     let pigData;
     for (let dataYear in pigPopulations) {
       if (dataYear === year) {
@@ -88,18 +105,23 @@ class GraphContainer extends React.PureComponent {
     }
 
     return (
-      <React.Fragment>
-        <DisplayYear year={year} />
-        <PlayPauseButton paused={paused} onClick={this.togglePlayPause} />
-        <BarGraph pigData={pigData} />
+      <div className={classes.root}>
+        <Grid container className={classes.root} spacing={16} justify="center">
+          <Paper className={classes.paper}>
+            <DisplayYear current={year} total={years}/>
+            <BarGraph pigData={pigData} />
+            <PlayPauseButton paused={paused} onClick={this.togglePlayPause} />
+          </Paper>
+        </Grid>
+
         <StopWatch
           paused={paused}
           incrementYear={this.incrementYear}
           interval={2000}
         />
-      </React.Fragment>
+      </div>
     );
   }
 }
 
-export default GraphContainer;
+export default withStyles(styles)(GraphContainer);
