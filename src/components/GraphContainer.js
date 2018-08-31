@@ -21,23 +21,38 @@ const styles = theme => ({
   }
 });
 
-class GraphContainer extends React.PureComponent {
+class GraphContainer extends React.Component {
   constructor(props) {
     super(props);
 
+    // use binding in the constructor using .bind() instead of arroow functions
+    // so GraphContainer only binds methods once, not on subsiquent updates
     this.getQueryString = this.getQueryString.bind(this);
     this.parseAndBuildPigData = this.parseAndBuildPigData.bind(this);
     this.togglePlayPause = this.togglePlayPause.bind(this);
     this.incrementYear = this.incrementYear.bind(this);
+    this.initializeYearData = this.initializeYearData.bind(this);
   }
 
+  // After the component has mounted, it checks for arguments passed
+  // as query string parameters and stores them in a variable. It then parses the JSON
+  // data into the model required by the Google Charts API and stores this
+  // in a varialbe. It then builds a newState object with the previously defined variables
+  // and sets State with it.
   componentDidMount() {
     const { paused, year } = this.getQueryString();
     const pigPopulations = this.parseAndBuildPigData(pigData);
-    const newState = { paused, year, pigPopulations };
+    const { initialYear, years } = this.initializeYearData(
+      year,
+      pigPopulations
+    );
+    const newState = { paused, year: initialYear, years, pigPopulations };
     this.setState(newState);
   }
 
+  // getQueryString pulls the values from url querystring (passed as props through <BrowserRouter/>)
+  // and assigns them to variables. It then performs a series of checks of these
+  // variables.
   getQueryString() {
     let { paused, year } = queryString.parse(this.props.location.search);
     if (paused && year) {
@@ -66,6 +81,12 @@ class GraphContainer extends React.PureComponent {
     return newPigData;
   }
 
+  initializeYearData(year, pigData) {
+    const years = Object.keys(pigData);
+    const initialYear = year ? year : years[0];
+    return { initialYear, years };
+  }
+
   togglePlayPause() {
     const { paused, year } = this.state;
     let newState;
@@ -76,8 +97,7 @@ class GraphContainer extends React.PureComponent {
   }
 
   incrementYear() {
-    const { year } = this.state;
-    const years = Object.keys(this.state.pigPopulations);
+    const { year, years } = this.state;
     if (!year) {
       this.setState({ year: years[0] });
     } else {
@@ -96,7 +116,7 @@ class GraphContainer extends React.PureComponent {
     }
     const { paused, year, pigPopulations } = this.state;
     const { classes } = this.props;
-    const years = Object.keys(pigPopulations)
+    const years = Object.keys(pigPopulations);
     let pigData;
     for (let dataYear in pigPopulations) {
       if (dataYear === year) {
@@ -108,7 +128,7 @@ class GraphContainer extends React.PureComponent {
       <div className={classes.root}>
         <Grid container className={classes.root} spacing={16} justify="center">
           <Paper className={classes.paper}>
-            <DisplayYear current={year} total={years}/>
+            <DisplayYear current={year} total={years} />
             <BarGraph pigData={pigData} />
             <PlayPauseButton paused={paused} onClick={this.togglePlayPause} />
           </Paper>

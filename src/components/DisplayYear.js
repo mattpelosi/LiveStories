@@ -15,7 +15,6 @@ const styles = theme => ({
 function DisplayYear(props) {
   const { classes, total, current } = props;
   const active = total.indexOf(current);
-
   return (
     <Paper className={classes.paper}>
       <Tabs
@@ -25,7 +24,7 @@ function DisplayYear(props) {
         centered
       >
         {total.map(year => {
-          return <Tab label={year} />;
+          return <Tab label={year} key={year} />;
         })}
       </Tabs>
     </Paper>
