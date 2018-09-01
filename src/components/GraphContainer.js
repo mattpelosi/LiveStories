@@ -32,6 +32,7 @@ class GraphContainer extends React.Component {
     this.togglePlayPause = this.togglePlayPause.bind(this);
     this.incrementYear = this.incrementYear.bind(this);
     this.initializeYearData = this.initializeYearData.bind(this);
+    this.goToYear = this.goToYear.bind(this);
   }
 
   // After the component has mounted, it checks for arguments passed
@@ -110,6 +111,11 @@ class GraphContainer extends React.Component {
     }
   }
 
+  goToYear(event) {
+    const year = event.target.innerText;
+    this.setState({ year: year });
+  }
+
   render() {
     if (!this.state) {
       return null;
@@ -128,7 +134,11 @@ class GraphContainer extends React.Component {
       <div className={classes.root}>
         <Grid container className={classes.root} spacing={16} justify="center">
           <Paper className={classes.paper}>
-            <DisplayYear current={year} total={years} />
+            <DisplayYear
+              current={year}
+              total={years}
+              goToYear={this.goToYear}
+            />
             <BarGraph pigData={pigData} />
             <PlayPauseButton paused={paused} onClick={this.togglePlayPause} />
           </Paper>
