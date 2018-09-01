@@ -51,7 +51,7 @@ class BarGraph extends React.Component {
 
   buildOptions() {
     return {
-      title: "Annual Population of wild pigs for all Hawiian Islands",
+      title: "Annual Population of wild pigs for each Hawiian Island",
       width: 600,
       height: 400,
       animation: {

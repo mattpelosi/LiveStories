@@ -35,6 +35,7 @@ function DisplayYear(props) {
         indicatorColor="primary"
         textColor="primary"
         centered
+        onChange={props.goToYear}
       >
         {total.map(year => {
           return <Tab label={year} key={year} />;
