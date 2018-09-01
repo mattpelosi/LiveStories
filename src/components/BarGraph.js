@@ -42,7 +42,6 @@ class BarGraph extends React.Component {
 
   buildDataTable() {
     const { pigData } = JSON.parse(JSON.stringify(this.props));
-    // debugger;
     pigData.forEach(item => item.push("color: #3F51B5"));
     pigData.unshift(["Element", "Density", { role: "style" }]);
 
