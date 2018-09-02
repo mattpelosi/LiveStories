@@ -125,10 +125,10 @@ class GraphContainer extends React.Component {
   hydrateStateWithLocalStorage(previousAppState) {
     let { paused, year } = queryString.parse(this.props.location.search);
     const persistedState = JSON.parse(previousAppState);
-    if (typeof paused !== "undefined" && typeof paused !== null) {
+    if (typeof paused !== "undefined" && paused !== null) {
       persistedState.paused = JSON.parse(paused);
     }
-    if (typeof year !== "undefined" && typeof year !== null) {
+    if (typeof year !== "undefined" && year !== null) {
       persistedState.year = year;
     }
     this.setState(persistedState);
