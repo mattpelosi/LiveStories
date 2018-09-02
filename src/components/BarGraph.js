@@ -19,6 +19,7 @@ class BarGraph extends React.Component {
     this.drawChart = this.drawChart.bind(this);
     this.buildDataTable = this.buildDataTable.bind(this);
     this.buildOptions = this.buildOptions.bind(this);
+    this.resize = this.resize.bind(this);
   }
 
   async componentDidMount() {
@@ -28,6 +29,7 @@ class BarGraph extends React.Component {
       const options = this.buildOptions();
       window.google.charts.setOnLoadCallback(this.drawChart(data, options));
     }
+    window.addEventListener("resize", this.resize);
   }
 
   componentDidUpdate(prevProps) {
@@ -50,12 +52,13 @@ class BarGraph extends React.Component {
   }
 
   buildOptions() {
+    const { interval } = this.props;
     return {
       title: "Annual Population of wild pigs for each Hawiian Island",
       width: 600,
       height: 400,
       animation: {
-        duration: 2000,
+        duration: interval,
         easing: "out",
         startup: true
       },
@@ -67,6 +70,12 @@ class BarGraph extends React.Component {
     var chart = new window.google.visualization.BarChart(this.chartRef.current);
     chart.draw(data, options);
     chart.container.childNodes[0].childNodes[0].style.margin = "0 auto";
+  }
+
+  resize() {
+    console.log("resizing");
+    window.innerHeight;
+    window.innerWidth;
   }
 
   render() {

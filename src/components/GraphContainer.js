@@ -33,6 +33,7 @@ class GraphContainer extends React.Component {
     this.incrementYear = this.incrementYear.bind(this);
     this.initializeYearData = this.initializeYearData.bind(this);
     this.goToYear = this.goToYear.bind(this);
+    this.saveStateToLocalStorage = this.saveStateToLocalStorage.bind(this);
   }
 
   // After the component has mounted, it checks for arguments passed
@@ -41,14 +42,24 @@ class GraphContainer extends React.Component {
   // in a varialbe. It then builds a newState object with the previously defined variables
   // and sets State with it.
   componentDidMount() {
-    const { paused, year } = this.getQueryString();
-    const pigPopulations = this.parseAndBuildPigData(pigData);
-    const { initialYear, years } = this.initializeYearData(
-      year,
-      pigPopulations
-    );
-    const newState = { paused, year: initialYear, years, pigPopulations };
-    this.setState(newState);
+    const { previousAppState } = localStorage;
+    if (previousAppState) {
+      this.hydrateStateWithLocalStorage(previousAppState);
+    } else {
+      const { paused, year } = this.getQueryString();
+      const pigPopulations = this.parseAndBuildPigData(pigData);
+      const { initialYear, years } = this.initializeYearData(
+        year,
+        pigPopulations
+      );
+      const newState = { paused, year: initialYear, years, pigPopulations };
+      this.setState(newState);
+    }
+    window.addEventListener("beforeunload", this.saveStateToLocalStorage);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("beforeunload");
   }
 
   // getQueryString pulls the values from url querystring (passed as props through <BrowserRouter/>)
@@ -59,11 +70,11 @@ class GraphContainer extends React.Component {
     if (paused && year) {
       return { paused: JSON.parse(paused), year: year };
     } else if (paused) {
-      return { paused: JSON.parse(paused), year: null };
+      return { paused: JSON.parse(paused), year: year };
     } else if (year) {
       return { paused: true, year: year };
     } else {
-      return { paused: true, year: null };
+      return { paused: true, year: year };
     }
   }
 
@@ -116,6 +127,26 @@ class GraphContainer extends React.Component {
     this.setState({ year: year });
   }
 
+  hydrateStateWithLocalStorage(previousAppState) {
+    let { paused, year } = queryString.parse(this.props.location.search);
+    const persistedState = JSON.parse(previousAppState);
+    if (typeof paused !== "undefined" && typeof paused !== null) {
+      persistedState.paused = paused;
+    }
+    if (typeof year !== "undefined" && typeof year !== null) {
+      persistedState.year = year;
+    }
+    this.setState(persistedState);
+  }
+
+  saveStateToLocalStorage() {
+    const appState = {};
+    for (let key in this.state) {
+      appState[key] = this.state[key];
+    }
+    localStorage.setItem("previousAppState", JSON.stringify(appState));
+  }
+
   render() {
     if (!this.state) {
       return null;
@@ -139,7 +170,7 @@ class GraphContainer extends React.Component {
               total={years}
               goToYear={this.goToYear}
             />
-            <BarGraph pigData={pigData} />
+            <BarGraph pigData={pigData} interval={2000} />
             <PlayPauseButton paused={paused} onClick={this.togglePlayPause} />
           </Paper>
         </Grid>
