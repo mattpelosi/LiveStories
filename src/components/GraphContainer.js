@@ -36,11 +36,6 @@ class GraphContainer extends React.Component {
     this.saveStateToLocalStorage = this.saveStateToLocalStorage.bind(this);
   }
 
-  // After the component has mounted, it checks for arguments passed
-  // as query string parameters and stores them in a variable. It then parses the JSON
-  // data into the model required by the Google Charts API and stores this
-  // in a varialbe. It then builds a newState object with the previously defined variables
-  // and sets State with it.
   componentDidMount() {
     const { previousAppState } = localStorage;
     if (previousAppState) {
@@ -131,7 +126,7 @@ class GraphContainer extends React.Component {
     let { paused, year } = queryString.parse(this.props.location.search);
     const persistedState = JSON.parse(previousAppState);
     if (typeof paused !== "undefined" && typeof paused !== null) {
-      persistedState.paused = paused;
+      persistedState.paused = JSON.parse(paused);
     }
     if (typeof year !== "undefined" && typeof year !== null) {
       persistedState.year = year;
