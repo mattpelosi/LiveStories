@@ -19,7 +19,6 @@ class BarGraph extends React.Component {
     this.drawChart = this.drawChart.bind(this);
     this.buildDataTable = this.buildDataTable.bind(this);
     this.buildOptions = this.buildOptions.bind(this);
-    // this.resize = this.resize.bind(this);
   }
 
   async componentDidMount() {
@@ -71,12 +70,6 @@ class BarGraph extends React.Component {
     chart.draw(data, options);
     chart.container.childNodes[0].childNodes[0].style.margin = "0 auto";
   }
-
-  // resize() {
-  //   console.log("resizing");
-  //   window.innerHeight;
-  //   window.innerWidth;
-  // }
 
   render() {
     const { classes } = this.props;

@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Conditional rendering and onClick event renders pause icon when props.paused = false 1`] = `
+<button
+  class="MuiButtonBase-root-28 MuiButton-root-2 MuiButton-text-4 MuiButton-outlined-10 MuiButton-sizeLarge-26 PlayPauseButton-button-1"
+  data-test="button"
+  tabindex="0"
+  type="button"
+>
+  <span
+    class="MuiButton-label-3"
+  >
+    <svg
+      aria-hidden="true"
+      class="MuiSvgIcon-root-31"
+      focusable="false"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"
+      >
+        
+      </path>
+      <path
+        d="M0 0h24v24H0z"
+        fill="none"
+      >
+        
+      </path>
+    </svg>
+  </span>
+  <span
+    class="MuiTouchRipple-root-38"
+  >
+    
+  </span>
+</button>
+`;
+
+exports[`Conditional rendering and onClick event renders play icon when props.paused = true 1`] = `
+<button
+  class="MuiButtonBase-root-28 MuiButton-root-2 MuiButton-text-4 MuiButton-outlined-10 MuiButton-sizeLarge-26 PlayPauseButton-button-1"
+  data-test="button"
+  tabindex="0"
+  type="button"
+>
+  <span
+    class="MuiButton-label-3"
+  >
+    <svg
+      aria-hidden="true"
+      class="MuiSvgIcon-root-31"
+      focusable="false"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M8 5v14l11-7z"
+      >
+        
+      </path>
+      <path
+        d="M0 0h24v24H0z"
+        fill="none"
+      >
+        
+      </path>
+    </svg>
+  </span>
+  <span
+    class="MuiTouchRipple-root-38"
+  >
+    
+  </span>
+</button>
+`;
